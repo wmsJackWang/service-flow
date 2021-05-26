@@ -1,0 +1,23 @@
+name: 参数校验流程
+id: jdk1
+desc: 方法节点执行
+input: com.service.flow.sample.common.jdk1.Jdk1Input
+output: com.service.flow.sample.common.jdk1.Jdk1Output
+temp: com.service.flow.sample.common.jdk1.Jdk1Temp
+startNode: methodNode1
+nodes:
+  - node:
+      id: methodNode1
+      name: methodNode1
+      component: paramsCheck_name
+      desc: 数量+1
+      input: com.service.flow.sample.common.jdk1.Jdk1Input
+      type: method
+      next: methodNode2
+  - node:
+      id: methodNode2
+      name: methodNode2
+      component: paramsCheck_age
+      desc: 数量+1
+      input: com.service.flow.sample.common.jdk1.Jdk1Input
+      type: method

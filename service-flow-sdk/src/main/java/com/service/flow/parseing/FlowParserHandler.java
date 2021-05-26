@@ -8,6 +8,8 @@ import com.service.flow.model.Node;
 import com.service.flow.parseing.component.NodeComponentFactory;
 import com.service.flow.parseing.component.NodeParser;
 import com.service.flow.util.BeanUtils;
+
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
@@ -33,11 +35,14 @@ public class FlowParserHandler {
         NodeParser nodeInstance = NodeComponentFactory.getNodeInstance(type);
         nodeInstance.setNodeMap(nodeMap);
         BaseOutput output = nodeInstance.parserNode(node, baseInput,baseTemp);
-        BeanUtils.copyProperties(output,baseTemp);
-        BeanUtils.copyProperties(baseTemp,baseInput);
+//        BeanUtils.copyProperties(output,baseTemp);
+//        BeanUtils.copyProperties(baseTemp,baseInput);
+        output.copyPropertiesTo(baseTemp);
+        baseTemp.copyPropertiesTo(baseInput);
         String nextNode = node.getNext();
         if(!StringUtils.isEmpty(nextNode)){
             Node nodeNext = nodeMap.get(nextNode);
+            Assert.isTrue(nodeNext!=null, node.getId()+" node of flow  cannot be null");
             output = execNode(nodeNext,baseInput,baseTemp,nodeMap);
         }
         BeanUtils.copyProperties(baseTemp,output);

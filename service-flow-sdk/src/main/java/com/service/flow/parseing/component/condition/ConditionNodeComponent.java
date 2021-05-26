@@ -32,12 +32,14 @@ public class ConditionNodeComponent extends AbstractNodeComponent {
     @Override
     public BaseOutput parser(Node node, BaseInput baseInput, BaseTemp baseTemp) {
         logger.debug("Start execution condition node{NodeId:{},NodeName:{}}",node.getId(),node.getName());
+        //条件节点，非常多的条件
         String conditions = node.getComponent();
         String[] condition = conditions.split(FlowConstants.COMMA);
         AtomicReference<BaseOutput> output = new AtomicReference<>(new BaseOutput());
         Arrays.stream(condition).forEach(str->{
             String[] split1 = str.split(FlowConstants.COLON);
             Object eval = SpleUtils.eval(split1[0], baseTemp);
+            logger.info("eval:{}", eval);
             if(Boolean.parseBoolean(eval.toString())){
                 String nodeStr = split1[1];
                 Node nodeByCondition = nodeMap.get(nodeStr);

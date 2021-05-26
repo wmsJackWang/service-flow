@@ -6,6 +6,7 @@ import com.service.flow.util.BeanUtils;
 import com.service.flow.util.ClassUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 
 import java.io.IOException;
@@ -44,18 +45,22 @@ public class FlowParser {
      * @throws IOException
      */
     public BaseOutput execute(BaseInput baseInput) throws IOException {
-        StopWatch stopWatch = new StopWatch();
+        StopWatch stopWatch = new StopWatch();//StopWatch是spring的一个计时工具。
         stopWatch.start();
         StringBuffer flowRecord = new StringBuffer();
         flowRecord.append(FlowConstants.FLOW+FlowConstants.COLON +defintition.getId());
         //输入参数
         BaseInput baseInputContext = ClassUtil.newInstance(defintition.getInput(), BaseInput.class);
-        BeanUtils.copyProperties(baseInput,baseInputContext);
-        BeanUtils.copyProperties(baseInputContext,baseTemp);
+//        BeanUtils.copyProperties(baseInput,baseInputContext);
+        baseInput.copyPropertiesTo(baseInputContext);
+        
+//        BeanUtils.copyProperties(baseInputContext,baseTemp);
+        baseInputContext.copyPropertiesTo(baseTemp);
         baseTemp.setFlowRecord(flowRecord);
         BaseOutput baseOutput = ClassUtil.newInstance(defintition.getOutput(), BaseOutput.class);
         String startNode = defintition.getStartNode();
         Node node = defintition.getNodeMap().get(startNode);
+        Assert.isTrue(node!=null, "startNode cannot be null");
         FlowParserHandler flowParserHandler = new FlowParserHandler();
         baseOutput = flowParserHandler.execNode(node,baseInputContext,baseTemp,nodeMap);
         stopWatch.stop();

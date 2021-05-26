@@ -27,10 +27,12 @@ public class FlowDefintitionFactory {
 
     /**
      * 初始化流程加载
+     * @deprecated 初始化流程容器中的所有流程属性对象，并生成流程定义对象。
      */
     public void initDefintionFactory() {
         flowDefintionRegistries.forEach(flowDefintionRegistry -> {
             try {
+            	//初始化
                 flowDefintitionMap.putAll(flowDefintionRegistry.registry());
             } catch (Exception e) {
                 throw new FlowException("Flow loading exception",e);

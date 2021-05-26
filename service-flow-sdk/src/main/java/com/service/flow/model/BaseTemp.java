@@ -8,7 +8,7 @@ import java.util.Map;
  * @Description TODO
  * @createTime 2020年06月21日 15:38:00
  */
-public class BaseTemp {
+public class BaseTemp extends BaseTransfer{
 
     private Long totalTime;
 

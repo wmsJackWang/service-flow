@@ -23,8 +23,9 @@ public abstract class AbstractFlowHandler implements IFlowHandler {
 
     @Override
     public BaseOutput execute(String flowId, BaseInput baseInput) {
-        FlowParser flowParser = new FlowParser(flowDefintion(flowId));
+        FlowParser flowParser = new FlowParser(flowDefintion(flowId));//为
         BaseOutput execute = null;
+        logger.info("【Start】begin execute flow , input:{}",baseInput==null?"input is empty":baseInput.toString());
         try{
             execute = flowParser.execute(baseInput);
         }catch (IOException e){

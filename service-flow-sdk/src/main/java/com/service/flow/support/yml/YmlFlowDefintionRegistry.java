@@ -33,18 +33,19 @@ public class YmlFlowDefintionRegistry implements FlowDefintionRegistry {
      * 注册流程模型
      * @return
      * @throws Exception
+     * @description 家在所有flow路径下的*.flow.yml文件，并初始化所有的流程。
      */
     public Map<String, FlowDefintion> registryModel() throws Exception {
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         Resource[] resources = resolver.getResources(CLASSPATH_FLOW);
         Map<String, FlowDefintion> flowMap = new HashMap<>();
         Arrays.stream(resources).forEach(resource->{
-            YamlMapFactoryBean yamlMapFactoryBean = new YamlMapFactoryBean();
+            YamlMapFactoryBean yamlMapFactoryBean = new YamlMapFactoryBean();//使用spring的yml解析工具类。
             yamlMapFactoryBean.setResources(resource);
             yamlMapFactoryBean.afterPropertiesSet();
-            Map<String, Object> object = yamlMapFactoryBean.getObject();
-            YmlFlow flow = JSONObject.parseObject(JSON.toJSONString(object), YmlFlow.class);
-            flowMap.put(flow.getId(),buildFlowDefintition(flow));
+            Map<String, Object> object = yamlMapFactoryBean.getObject();//得到加载后的流程配置对象。其中涉及到了yml的属性加载和yml的数组属性加载
+            YmlFlow flow = JSONObject.parseObject(JSON.toJSONString(object), YmlFlow.class);//将map对象使用json工具转化为流程属性对象。
+            flowMap.put(flow.getId(),buildFlowDefintition(flow));//根据流程的属性对象，初始化流程定义对象，并加入到流程容器中去。
         });
         return flowMap;
     }

@@ -35,13 +35,13 @@ public class AnnotationFlowHandler extends AbstractFlowHandler{
 
     @Override
     public FlowDefintion flowDefintion(String flowId) {
-        FlowDefintion flowDefintion = flowHandler.flowDefintion(flowId);
-        String input = flowDefintion.getInput();
-        flowDefintion.setInput(dtoClassName(input));
+        FlowDefintion flowDefintion = flowHandler.flowDefintion(flowId);//加载需要执行的flow对象
+        String input = flowDefintion.getInput();//获取流程的输入
+        flowDefintion.setInput(dtoClassName(input));//获取input的className
         String output = flowDefintion.getOutput();
-        flowDefintion.setOutput(dtoClassName(output));
+        flowDefintion.setOutput(dtoClassName(output));//获取output的className
         String temp = flowDefintion.getTemp();
-        flowDefintion.setTemp(dtoClassName(temp));
+        flowDefintion.setTemp(dtoClassName(temp));//获取临时变量的类名称
         Map<String, Node> nodeMap = flowDefintion.getNodeMap();
         nodeClassName(nodeMap);
         return flowDefintion;
@@ -56,6 +56,9 @@ public class AnnotationFlowHandler extends AbstractFlowHandler{
         return dto;
     }
 
+    /*
+     * @description 将flow中的所有节点信息都设置到节点对象中去。
+     */
     private void nodeClassName(Map<String, Node> nodeMap){
         Map<String, Node> nodeMapNew = new HashMap<>();
         Map<String, ComponentDefinition> componentDefinitionMap = componentContext.getComponentDefinitionMap();
